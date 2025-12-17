@@ -1,42 +1,54 @@
 import secrets
 import string
 
-# Funktion som genererar ett säkert lösenord
+# Funktion: Generera ett säkert lösenord
 
 def generate_secure_password(length=12):
     """
-    Skapar ett säkert slumpmässigt lösenord
-    med:
-    - stora bokstäver
-    - små bokstäver
-    - siffror
-    - specialtecken
+    Skapar ett säkert lösenord som ALLTID innehåller:
+    - minst 1 liten bokstav
+    - minst 1 stor bokstav
+    - minst 1 siffra
+    - minst 1 specialtecken
+
     """
 
-    # Alla tillåtna tecken i lösenordet
-    characters = (
-        string.ascii_lowercase +   # a-z
-        string.ascii_uppercase +   # A-Z
-        string.digits +            # 0-9
-        string.punctuation         # !@#$% osv
-    )
+    if length < 4:
+        raise ValueError("Lösenordets längd måste vara minst 4 tecken.")
 
-    # Bygger lösenordet tecken för tecken
-    password = ''.join(
-        secrets.choice(characters) for _ in range(length)
-    )
+    # Teckengrupper
+    lowercase = string.ascii_lowercase
+    uppercase = string.ascii_uppercase
+    digits = string.digits
+    special = string.punctuation
 
+    # Tvinga fram minst ett tecken från varje grupp
+    password_characters = [
+        secrets.choice(lowercase),
+        secrets.choice(uppercase),
+        secrets.choice(digits),
+        secrets.choice(special)
+    ]
+
+    # Slå ihop alla tillåtna tecken
+    all_characters = lowercase + uppercase + digits + special
+
+    # Fyll resten av lösenordet slumpmässigt
+    for _ in range(length - 4):
+        password_characters.append(secrets.choice(all_characters))
+
+    # Blanda tecknen så ordningen blir helt slumpmässig
+    secrets.SystemRandom().shuffle(password_characters)
+
+    # Gör listan till en sträng
+    password = ''.join(password_characters)
     return password
 
-# Huvudprogram
+# Run:
 
 def main():
-    # Skapar ett lösenord med minst 12 tecken
     password = generate_secure_password(12)
-
     print(password)
 
-
-# Kör programmet
 if __name__ == "__main__":
     main()
