@@ -34,7 +34,7 @@ def main():
     # Skapar ett lösenord med minst 12 tecken
     password = generate_secure_password(12)
 
-    print(password)
+    print(f"Här är ditt säkra lösenord: {password}")
 
 
 # Kör programmet
