@@ -14,7 +14,7 @@ def generate_secure_password(length=12):
     """
 
     if length < 4:
-        raise ValueError("Lösenordets längd måste vara minst 4 tecken.")
+        raise ValueError("Fel vid generering av lösenord, kontakta administratör.")
 
     # Teckengrupper
     lowercase = string.ascii_lowercase
@@ -30,7 +30,7 @@ def generate_secure_password(length=12):
         secrets.choice(special)
     ]
 
-    # Slå ihop alla tillåtna tecken
+    # Ser till att minst ett av olika tecken används
     all_characters = lowercase + uppercase + digits + special
 
     # Fyll resten av lösenordet slumpmässigt
@@ -40,15 +40,35 @@ def generate_secure_password(length=12):
     # Blanda tecknen så ordningen blir helt slumpmässig
     secrets.SystemRandom().shuffle(password_characters)
 
-    # Gör listan till en sträng
+    # Gör listan till en sträng (från 0,1,2,3 til 0123)
     password = ''.join(password_characters)
     return password
 
-# Run:
+# Kör Programmet
 
 def main():
-    password = generate_secure_password(12)
-    print(password)
+
+    while True:
+        user_input = input("\nAnge önskad lösenordslängd (minst 10): \n")
+
+        try:
+            length = int(user_input)
+
+            if length < 10:
+                print("\nLängden på lösenordet måste innehålla minst 10 tecken.\n")
+                continue
+
+            # Korrekt input → bryt loopen
+            break
+
+        except ValueError:
+            print("\nFelaktig inmatning. Ange ett heltal.\n")
+
+    # Generera lösenordet
+    password = generate_secure_password(length)
+
+    # Visar lösenordet
+    print("\nPassword:",password,"\n")
 
 if __name__ == "__main__":
     main()
