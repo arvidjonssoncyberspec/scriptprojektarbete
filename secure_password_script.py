@@ -66,9 +66,12 @@ def main():
 
     # Generera lösenordet
     password = generate_secure_password(length)
+<<<<<<< HEAD
 
     #Skriver ut lösenordet
     print(f"Här är ditt säkra lösenord: {password}")
+=======
+>>>>>>> e29f39a691c58331fb9bde8ba84b5e69b1fbc96e
 
 if __name__ == "__main__":
     main()
