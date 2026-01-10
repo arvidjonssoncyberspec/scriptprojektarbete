@@ -67,8 +67,5 @@ def main():
     # Generera lösenordet
     password = generate_secure_password(length)
 
-    # Visar lösenordet
-    print("\nPassword:",password,"\n")
-
 if __name__ == "__main__":
     main()
