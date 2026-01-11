@@ -56,6 +56,8 @@ Detta innebär att hela lösenordet **aldrig exponeras** över nätverket.
    - python secure_password_script.py
    - python3 secure_password_script.py
 
+---
+
 ## Krav
 
 - Python 3.x
