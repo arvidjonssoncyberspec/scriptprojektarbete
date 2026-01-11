@@ -1,4 +1,4 @@
-﻿# Secure Password Generator with Have I Been Pwned Check
+## Säker Lösenords Generator med Have I Been Pwned Check
 
 Detta projekt är ett enkelt Python-script som genererar ett säkert lösenord och kontrollerar om lösenordet har förekommit i kända dataläckor via tjänsten **Have I Been Pwned**.
 
@@ -55,9 +55,6 @@ Detta innebär att hela lösenordet **aldrig exponeras** över nätverket.
    - py secure_password_script.py
    - python secure_password_script.py
    - python3 secure_password_script.py
-
-## Exempel på hur scriptet ser ut när den körs visas här nedan 
-(secure_password_script_running.png)
 
 ## Krav
 
