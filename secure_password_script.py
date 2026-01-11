@@ -1,8 +1,11 @@
 import secrets
 import string
+import hashlib
+import requests
 
+# --------------------------------------------------
 # Funktion: Generera ett säkert lösenord
-
+# --------------------------------------------------
 def generate_secure_password(length=12):
     """
     Skapar ett säkert lösenord som ALLTID innehåller:
@@ -10,7 +13,6 @@ def generate_secure_password(length=12):
     - minst 1 stor bokstav
     - minst 1 siffra
     - minst 1 specialtecken
-
     """
 
     if length < 4:
@@ -30,21 +32,55 @@ def generate_secure_password(length=12):
         secrets.choice(special)
     ]
 
-    # Ser till att minst ett av olika tecken används
+    # Alla tillåtna tecken
     all_characters = lowercase + uppercase + digits + special
 
     # Fyll resten av lösenordet slumpmässigt
     for _ in range(length - 4):
         password_characters.append(secrets.choice(all_characters))
 
-    # Blanda tecknen så ordningen blir helt slumpmässig
+    # Blanda tecknen
     secrets.SystemRandom().shuffle(password_characters)
 
-    # Gör listan till en sträng (från 0,1,2,3 til 0123)
+    # Gör listan till en sträng
     password = ''.join(password_characters)
     return password
 
-# Kör Programmet
+
+# def funktion som Kontrollerar lösenord mot Have I Been Pwned
+
+def check_pwned(password):
+    """
+    Kontrollerar om lösenordet har förekommit i kända dataläckor
+    via Have I Been Pwned API (k-anonymity).
+    """
+
+    # Skapar hash av lösenordet
+    sha1_hash = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
+
+    # Dela upp hashen
+    hash_prefix = sha1_hash[:5]
+    hash_suffix = sha1_hash[5:]
+
+    # API-endpoint
+    url = f"https://api.pwnedpasswords.com/range/{hash_prefix}"
+
+    # Skicka förfrågan
+    response = requests.get(url)
+
+    # Gå igenom svarsraderna
+    for line in response.text.splitlines():
+        suffix, count = line.split(":")
+
+        # Match hittad → lösenordet är läckt
+        if suffix == hash_suffix:
+            return int(count)
+
+    # Ingen match → lösenordet är inte läckt
+    return 0
+
+
+# Huvudprogrammet
 
 def main():
 
@@ -58,7 +94,6 @@ def main():
                 print("\nLängden på lösenordet måste innehålla minst 10 tecken.\n")
                 continue
 
-            # Korrekt input → bryt loopen
             break
 
         except ValueError:
@@ -67,8 +102,19 @@ def main():
     # Generera lösenordet
     password = generate_secure_password(length)
 
-    #Skriver ut lösenordet
-    print(f"Här är ditt säkra lösenord: {password}")
+    # Visa lösenordet
+    print(f"\nHär är ditt säkra lösenord:\n{password}\n")
+
+    # Kontrollera mot Have I Been Pwned
+    leak_count = check_pwned(password)
+
+    if leak_count > 0:
+        print(f"Lösenordet har hittats i dataläckor {leak_count} gånger.")
+        print("Rekommendation: använd INTE detta lösenord.\n")
+    else:
+        print("Lösenordet har INTE hittats i några kända dataläckor.")
+        print("Lösenordet ska vara säkert.\n")
+
 
 if __name__ == "__main__":
     main()
