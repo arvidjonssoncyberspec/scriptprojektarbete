@@ -58,6 +58,12 @@ Detta innebär att hela lösenordet **aldrig exponeras** över nätverket.
 
 ---
 
+## Example Output
+
+Below is an example of how the script looks when running in the terminal:
+
+![Secure Password Script – Example Output](images/secure_password_script_running.png)
+
 ## Krav
 
 - Python 3.x
